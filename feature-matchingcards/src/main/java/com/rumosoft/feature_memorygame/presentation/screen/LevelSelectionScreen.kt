@@ -1,4 +1,4 @@
-package com.rumosoft.memorygame.presentation.screen
+package com.rumosoft.feature_memorygame.presentation.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,37 +15,42 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rumosoft.feature_memorygame.R
 import com.rumosoft.library_components.presentation.component.BigRoundedButton
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
-import com.rumosoft.memorygame.R
 
 @Composable
-fun LevelSelectionScreen() {
+fun LevelSelectionRoute(onLevelSelected: () -> Unit = {}) {
+    LevelSelectionScreen(onLevelSelected)
+}
+
+@Composable
+fun LevelSelectionScreen(onLevelSelected: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceAround,
     ) {
         Text(
             text = stringResource(id = R.string.select_level_title),
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.h3,
         )
         BigRoundedButton(
             text = stringResource(id = R.string.level_easy),
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorEasy)
+            colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorEasy),
         )
         BigRoundedButton(
             text = stringResource(id = R.string.level_medium),
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorMedium)
+            colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorMedium),
         )
         BigRoundedButton(
             text = stringResource(id = R.string.level_difficult),
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorDifficult)
+            colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorDifficult),
         )
     }
 }

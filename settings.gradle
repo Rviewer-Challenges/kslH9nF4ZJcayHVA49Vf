@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "MemoryGame"
 include ':app'
 include ':library-components'
+include ':feature-matchingcards'
+include ':library-core-navigation'
