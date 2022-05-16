@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "MemoryGame"
 include ':app'
+include ':library-components'

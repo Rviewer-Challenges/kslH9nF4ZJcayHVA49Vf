@@ -1,4 +1,4 @@
-package com.rumosoft.memorygame.ui.theme
+package com.rumosoft.library_components.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
