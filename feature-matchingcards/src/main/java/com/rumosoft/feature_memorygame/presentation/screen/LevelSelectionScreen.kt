@@ -16,16 +16,22 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rumosoft.feature_memorygame.R
+import com.rumosoft.feature_memorygame.domain.entity.Level
+import com.rumosoft.feature_memorygame.domain.entity.Level.*
 import com.rumosoft.library_components.presentation.component.BigRoundedButton
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
 
 @Composable
-fun LevelSelectionRoute(onLevelSelected: () -> Unit = {}) {
-    LevelSelectionScreen(onLevelSelected)
+fun LevelSelectionRoute(
+    navigateToMatchingCards: (Level) -> Unit = {},
+) {
+    LevelSelectionScreen(
+        navigateToMatchingCards = navigateToMatchingCards
+    )
 }
 
 @Composable
-fun LevelSelectionScreen(onLevelSelected: () -> Unit = {}) {
+fun LevelSelectionScreen(navigateToMatchingCards: (Level) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,16 +47,19 @@ fun LevelSelectionScreen(onLevelSelected: () -> Unit = {}) {
             text = stringResource(id = R.string.level_easy),
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorEasy),
+            onClick = { navigateToMatchingCards(Easy) },
         )
         BigRoundedButton(
             text = stringResource(id = R.string.level_medium),
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorMedium),
+            onClick = { navigateToMatchingCards(Medium) }
         )
         BigRoundedButton(
             text = stringResource(id = R.string.level_difficult),
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(backgroundColor = MemoryGameTheme.extraColors.colorDifficult),
+            onClick = { navigateToMatchingCards(Difficult) }
         )
     }
 }
