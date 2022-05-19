@@ -33,5 +33,4 @@ internal class LevelSelectionScreenKtTest {
         composeTestRule.onNodeWithText(levelMediumButtonTitle).assertIsDisplayed()
         composeTestRule.onNodeWithText(levelDifficultButtonTitle).assertIsDisplayed()
     }
-
 }

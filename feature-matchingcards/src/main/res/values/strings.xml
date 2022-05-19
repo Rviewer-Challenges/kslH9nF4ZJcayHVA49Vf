@@ -3,4 +3,6 @@
     <string name="level_easy">Easy</string>
     <string name="level_medium">Medium</string>
     <string name="level_difficult">Difficult</string>
+    <string name="loading">Loading</string>
+    <string name="cards">Cards</string>
 </resources>
