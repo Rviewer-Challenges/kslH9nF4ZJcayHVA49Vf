@@ -3,9 +3,11 @@ package com.rumosoft.feature_memorygame.presentation.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.domain.entity.Orientation
-import com.rumosoft.feature_memorygame.domain.usecase.GetBoardInfoUseCase
+import com.rumosoft.feature_memorygame.domain.entity.flipCard
+import com.rumosoft.feature_memorygame.domain.usecase.GetBoardUseCase
 import com.rumosoft.feature_memorygame.presentation.navigation.destination.MatchingCardsDestination
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.MatchingCardsState
@@ -26,7 +28,7 @@ private const val ONE_SEC_IN_MILLIS = 1_000L
 @HiltViewModel
 class MatchingCardsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getBoardInfoUseCase: GetBoardInfoUseCase,
+    private val getBoardUseCase: GetBoardUseCase,
 ) : ViewModel() {
     val uiState: StateFlow<MatchingCardsState> get() = _uiState
     private val _uiState = MutableStateFlow<MatchingCardsState>(Loading)
@@ -38,15 +40,15 @@ class MatchingCardsViewModel @Inject constructor(
     private var finished = false
 
     fun retrieveBoardInfo(orientation: Orientation) {
-        val boardInfo = getBoardInfoUseCase.invoke(level, orientation)
+        val boardInfo = getBoardUseCase(level, orientation)
         startingTime = Instant.now()
         val remainingTime = ONE_MINUTE - ChronoUnit.SECONDS.between(Instant.now(), startingTime)
         _uiState.update {
             Ready(
                 level = level,
-                boardInfo = boardInfo,
+                board = boardInfo,
                 time = remainingTime,
-                remainingPairs = boardInfo.cards / 2,
+                remainingPairs = boardInfo.cards.size / 2,
             )
         }
         viewModelScope.launch {
@@ -65,6 +67,16 @@ class MatchingCardsViewModel @Inject constructor(
             }
             if (remainingTime <= 0) {
                 finished = true
+            }
+        }
+    }
+
+    fun onCardSelected(card: GameCard) {
+        _uiState.update { state ->
+            if (state is Ready) {
+                state.copy(board = state.board.flipCard(card))
+            } else {
+                state
             }
         }
     }

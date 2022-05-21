@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import com.rumosoft.feature_memorygame.R
-import com.rumosoft.feature_memorygame.domain.entity.BoardInfo
+import com.rumosoft.feature_memorygame.domain.entity.Board
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
@@ -39,8 +39,8 @@ internal class MatchingCardsScreenKtTest {
             MatchingCardsScreen(
                 uiState = Ready(
                     level = Level.Easy,
-                    boardInfo = BoardInfo(
-                        cards = 16,
+                    board = Board(
+                        numCards = 16,
                         columns = 4,
                     ),
                 )

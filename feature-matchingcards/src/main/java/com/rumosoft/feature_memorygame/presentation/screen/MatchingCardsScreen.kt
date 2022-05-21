@@ -22,6 +22,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rumosoft.feature_memorygame.R
+import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.presentation.component.Counter
 import com.rumosoft.feature_memorygame.presentation.component.GameBoard
 import com.rumosoft.feature_memorygame.presentation.utils.configOrientation
@@ -44,14 +45,20 @@ fun MatchingCardsRoute(
         }
     }
     val uiState by viewModel.uiState.collectAsState()
-    MatchingCardsScreen(uiState)
+    MatchingCardsScreen(
+        uiState = uiState,
+        onCardSelected = viewModel::onCardSelected,
+    )
 }
 
 @Composable
-internal fun MatchingCardsScreen(uiState: MatchingCardsState) {
+internal fun MatchingCardsScreen(
+    uiState: MatchingCardsState,
+    onCardSelected: (GameCard) -> Unit = {},
+) {
     when (uiState) {
         Loading -> MatchingCardsLoading()
-        is Ready -> MatchingCardsReady(uiState)
+        is Ready -> MatchingCardsReady(uiState, onCardSelected)
     }
 }
 
@@ -69,10 +76,16 @@ private fun MatchingCardsLoading() {
 }
 
 @Composable
-private fun MatchingCardsReady(uiState: Ready) {
+private fun MatchingCardsReady(
+    uiState: Ready,
+    onCardSelected: (GameCard) -> Unit = {},
+) {
     Column {
         Counters(uiState)
-        GameBoard(uiState)
+        GameBoard(
+            uiState = uiState,
+            onCardSelected = onCardSelected
+        )
     }
 }
 

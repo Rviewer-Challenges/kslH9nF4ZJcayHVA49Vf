@@ -1,6 +1,7 @@
 package com.rumosoft.feature_memorygame.domain.usecase
 
-import com.rumosoft.feature_memorygame.domain.entity.BoardInfo
+import com.rumosoft.feature_memorygame.domain.entity.Board
+import com.rumosoft.feature_memorygame.domain.entity.BoardFactoryImpl
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.domain.entity.Orientation
 import com.rumosoft.library_tests.TestCoroutineExtension
@@ -14,41 +15,16 @@ import org.junit.jupiter.params.provider.MethodSource
 
 @ExperimentalCoroutinesApi
 @ExtendWith(TestCoroutineExtension::class)
-internal class GetBoardInfoUseCaseTest {
+internal class GetBoardUseCaseTest {
     companion object {
         @JvmStatic
         fun boardInfoGenerator() = listOf(
-            Arguments.of(
-                Level.Easy, Orientation.Portrait, BoardInfo(
-                    cards = 16,
-                    columns = 4
-                )
-            ), Arguments.of(
-                Level.Easy, Orientation.Landscape, BoardInfo(
-                    cards = 16,
-                    columns = 4
-                )
-            ), Arguments.of(
-                Level.Medium, Orientation.Portrait, BoardInfo(
-                    cards = 24,
-                    columns = 4
-                )
-            ), Arguments.of(
-                Level.Medium, Orientation.Landscape, BoardInfo(
-                    cards = 24,
-                    columns = 6
-                )
-            ), Arguments.of(
-                Level.Difficult, Orientation.Portrait, BoardInfo(
-                    cards = 30,
-                    columns = 5
-                )
-            ), Arguments.of(
-                Level.Difficult, Orientation.Landscape, BoardInfo(
-                    cards = 30,
-                    columns = 6
-                )
-            )
+            Arguments.of(Level.Easy, Orientation.Portrait, 16, 4),
+            Arguments.of(Level.Easy, Orientation.Landscape, 16, 4),
+            Arguments.of(Level.Medium, Orientation.Portrait, 24, 4),
+            Arguments.of(Level.Medium, Orientation.Landscape, 24, 6),
+            Arguments.of(Level.Difficult, Orientation.Portrait, 30, 5),
+            Arguments.of(Level.Difficult, Orientation.Landscape, 30, 6)
         )
     }
 
@@ -57,25 +33,28 @@ internal class GetBoardInfoUseCaseTest {
     fun `GetInfoUseCase should return BoardInfo`(
         level: Level,
         orientation: Orientation,
-        boardInfo: BoardInfo
+        numCards: Int,
+        numColumns: Int
     ) = test {
         runTest {
             val result = `when getBoardInfoUseCase is invoked`(level, orientation)
 
-            `then the returned BoardInfo is as expected`(boardInfo, result)
+            `then the returned Board is as expected`(numCards, numColumns, result)
         }
     }
 
     private fun TestScope.`when getBoardInfoUseCase is invoked`(
         level: Level,
         orientation: Orientation
-    ) = getBoardInfoUseCase(level, orientation)
+    ) = getBoardUseCase(level, orientation)
 
-    private fun `then the returned BoardInfo is as expected`(
-        boardInfo: BoardInfo,
-        result: BoardInfo
+    private fun `then the returned Board is as expected`(
+        numCards: Int,
+        numColumns: Int,
+        board: Board
     ) {
-        assertEquals(boardInfo, result)
+        assertEquals(numCards, board.cards.size)
+        assertEquals(numColumns, board.columns)
     }
 
     private fun test(block: TestScope.() -> Unit) {
@@ -83,6 +62,6 @@ internal class GetBoardInfoUseCaseTest {
     }
 
     private class TestScope(
-        val getBoardInfoUseCase: GetBoardInfoUseCase = GetBoardInfoUseCase()
+        val getBoardUseCase: GetBoardUseCase = GetBoardUseCase(BoardFactoryImpl())
     )
 }
