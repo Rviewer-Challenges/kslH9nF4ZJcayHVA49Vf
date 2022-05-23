@@ -17,6 +17,7 @@ fun FlipCard(
     cardFace: CardFace,
     onClick: (CardFace) -> Unit,
     modifier: Modifier = Modifier,
+    axis: RotationAxis = RotationAxis.AxisY,
     back: @Composable () -> Unit = {},
     front: @Composable () -> Unit = {},
 ) {
@@ -31,7 +32,11 @@ fun FlipCard(
         onClick = { onClick(cardFace) },
         modifier = modifier
             .graphicsLayer {
-                rotationY = rotation.value
+                if (axis == RotationAxis.AxisX) {
+                    rotationX = rotation.value
+                } else {
+                    rotationY = rotation.value
+                }
                 cameraDistance = 12f * density
             },
     ) {
@@ -46,7 +51,11 @@ fun FlipCard(
                 Modifier
                     .fillMaxSize()
                     .graphicsLayer {
-                        rotationY = 180f
+                        if (axis == RotationAxis.AxisX) {
+                            rotationX = 180f
+                        } else {
+                            rotationY = 180f
+                        }
                     },
             ) {
                 back()
@@ -66,4 +75,9 @@ enum class CardFace(val angle: Float) {
     };
 
     abstract val next: CardFace
+}
+
+enum class RotationAxis {
+    AxisX,
+    AxisY,
 }

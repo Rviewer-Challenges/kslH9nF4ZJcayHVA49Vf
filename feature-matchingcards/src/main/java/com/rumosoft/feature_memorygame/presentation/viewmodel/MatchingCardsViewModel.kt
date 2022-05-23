@@ -39,16 +39,16 @@ class MatchingCardsViewModel @Inject constructor(
     private var startingTime: Instant? = null
     private var finished = false
 
-    fun retrieveBoardInfo(orientation: Orientation) {
-        val boardInfo = getBoardUseCase(level, orientation)
+    fun retrieveBoard(orientation: Orientation) {
+        val board = getBoardUseCase(level, orientation)
         startingTime = Instant.now()
         val remainingTime = ONE_MINUTE - ChronoUnit.SECONDS.between(Instant.now(), startingTime)
         _uiState.update {
             Ready(
                 level = level,
-                board = boardInfo,
+                board = board,
                 time = remainingTime,
-                remainingPairs = boardInfo.cards.size / 2,
+                remainingPairs = board.cards.size / 2,
             )
         }
         viewModelScope.launch {

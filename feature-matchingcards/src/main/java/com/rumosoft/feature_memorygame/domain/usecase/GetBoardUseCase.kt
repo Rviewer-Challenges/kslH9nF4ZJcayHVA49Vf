@@ -11,20 +11,21 @@ import com.rumosoft.feature_memorygame.domain.entity.Orientation.Portrait
 import javax.inject.Inject
 
 class GetBoardUseCase @Inject constructor(
-    private val boardFactory: BoardFactory
+    private val boardFactory: BoardFactory,
+    private val getCardsUseCase: GetCardsUseCase,
 ) {
     operator fun invoke(level: Level, orientation: Orientation): Board {
         return when (level) {
             Easy -> boardFactory.getBoard(
-                numCards = 16,
+                cards = getCardsUseCase(numCards = 16),
                 numColumns = 4
             )
             Medium -> boardFactory.getBoard(
-                numCards = 24,
+                cards = getCardsUseCase(numCards = 24),
                 numColumns = if (orientation == Portrait) 4 else 6
             )
             Difficult -> boardFactory.getBoard(
-                numCards = 30,
+                cards = getCardsUseCase(30),
                 numColumns = if (orientation == Portrait) 5 else 6
             )
         }

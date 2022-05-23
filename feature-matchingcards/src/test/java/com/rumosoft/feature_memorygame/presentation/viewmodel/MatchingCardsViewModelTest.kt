@@ -14,7 +14,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceTimeBy
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -68,7 +67,9 @@ internal class MatchingCardsViewModelTest {
     ) {
         every { getBoardUseCase(level, orientation) } returns
                 Board(
-                    cards = (1..16).map { GameCard("image $it") },
+                    cards = (1..16).map {
+                        GameCard(id = it, characterId = it, name = "name $it", image = "image $it")
+                    },
                     columns = 4
                 )
     }
@@ -78,15 +79,11 @@ internal class MatchingCardsViewModelTest {
     }
 
     private fun TestScope.`when retrieveBoardInfo is invoked`(orientation: Orientation) {
-        viewModel.retrieveBoardInfo(orientation)
+        viewModel.retrieveBoard(orientation)
     }
 
     private fun TestScope.`when selectel level`(level: Level) {
         `given selectel level`(level)
-    }
-
-    private fun kotlinx.coroutines.test.TestScope.`when seconds have passed`(seconds: Int) {
-        advanceTimeBy(((seconds * 1000) + 1).toLong())
     }
 
     private fun TestScope.`then getBoardInfoUseCase is invoked`(

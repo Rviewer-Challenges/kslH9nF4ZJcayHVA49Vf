@@ -40,7 +40,7 @@ fun MatchingCardsRoute(
     var orientationPassed by rememberSaveable { mutableStateOf(false) }
     if (!orientationPassed) { // To prevent it to be initialized multiple times on orientation change
         LaunchedEffect(Unit) {
-            viewModel.retrieveBoardInfo(orientation)
+            viewModel.retrieveBoard(orientation)
             orientationPassed = true
         }
     }
