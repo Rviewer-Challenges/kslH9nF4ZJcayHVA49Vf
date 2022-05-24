@@ -7,6 +7,10 @@ import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.domain.entity.Orientation
 import com.rumosoft.feature_memorygame.domain.entity.flipCard
+import com.rumosoft.feature_memorygame.domain.entity.isReversed
+import com.rumosoft.feature_memorygame.domain.entity.matched
+import com.rumosoft.feature_memorygame.domain.entity.numPairs
+import com.rumosoft.feature_memorygame.domain.entity.resetCards
 import com.rumosoft.feature_memorygame.domain.usecase.GetBoardUseCase
 import com.rumosoft.feature_memorygame.presentation.navigation.destination.MatchingCardsDestination
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
@@ -39,6 +43,8 @@ class MatchingCardsViewModel @Inject constructor(
     private var startingTime: Instant? = null
     private var finished = false
 
+    private var flippedCards: Pair<GameCard?, GameCard?> = null to null
+
     fun retrieveBoard(orientation: Orientation) {
         val board = getBoardUseCase(level, orientation)
         startingTime = Instant.now()
@@ -48,7 +54,7 @@ class MatchingCardsViewModel @Inject constructor(
                 level = level,
                 board = board,
                 time = remainingTime,
-                remainingPairs = board.cards.size / 2,
+                remainingPairs = board.numPairs,
             )
         }
         viewModelScope.launch {
@@ -73,11 +79,40 @@ class MatchingCardsViewModel @Inject constructor(
 
     fun onCardSelected(card: GameCard) {
         _uiState.update { state ->
-            if (state is Ready) {
-                state.copy(board = state.board.flipCard(card))
+            if (state is Ready && card.isReversed()) {
+                val (first, second) = flippedCards
+                if (first != null && second != null) {
+                    flippedCards = card to null
+                    state.copy(
+                        board = state.board.resetCards(first, second).flipCard(card)
+                    )
+                } else {
+                    val matched = checkMatches(card)
+                    state.copy(
+                        board = state.board.flipCard(card).let {
+                            if (matched) it.matched(card.characterId) else it
+                        },
+                        remainingPairs = if (matched) state.remainingPairs - 1
+                        else state.remainingPairs
+                    )
+                }
             } else {
                 state
             }
         }
+    }
+
+    private fun checkMatches(card: GameCard): Boolean {
+        var matched = false
+        val (first, second) = flippedCards
+        flippedCards = if (first == null) {
+            card to null
+        } else {
+            if (first.characterId == card.characterId) {
+                matched = true
+            }
+            first to card
+        }
+        return matched
     }
 }

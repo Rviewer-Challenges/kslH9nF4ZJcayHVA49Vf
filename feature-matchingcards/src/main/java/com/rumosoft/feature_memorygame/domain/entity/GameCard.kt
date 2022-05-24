@@ -10,3 +10,6 @@ data class GameCard(
     val face: CardFace = CardFace.Back,
     val matched: Boolean = false
 )
+
+fun GameCard.isReversed() =
+    face == CardFace.Back

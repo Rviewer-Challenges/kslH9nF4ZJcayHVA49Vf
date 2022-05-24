@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import com.rumosoft.feature_memorygame.R
 import com.rumosoft.feature_memorygame.domain.entity.Board
+import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
@@ -40,14 +41,29 @@ internal class MatchingCardsScreenKtTest {
                 uiState = Ready(
                     level = Level.Easy,
                     board = Board(
-                        numCards = 16,
-                        columns = 4,
+                        cards = listOf(
+                            getSampleCard(1),
+                            getSampleCard(2),
+                            getSampleCard(3),
+                            getSampleCard(4)
+                        ),
+                        columns = 2,
                     ),
+                    time = 60,
+                    remainingPairs = 2,
                 )
             )
         }
 
         composeTestRule.onNodeWithContentDescription(cardsDescription).assertIsDisplayed()
     }
+
+    private fun getSampleCard(id: Int): GameCard =
+        GameCard(
+            id = id,
+            characterId = id,
+            name = "name $id",
+            image = "image $id"
+        )
 
 }

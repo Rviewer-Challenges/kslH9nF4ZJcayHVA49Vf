@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +31,6 @@ import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun GameBoard(
     uiState: Ready,
@@ -45,48 +45,71 @@ internal fun GameBoard(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         items(uiState.board.cards) { gameCard ->
+            BoardCard(gameCard, onCardSelected)
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterialApi::class)
+private fun BoardCard(
+    gameCard: GameCard,
+    onCardSelected: (GameCard) -> Unit
+) {
+    Box(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxWidth(.5f)
+        .aspectRatio(1f)) {
+        if (!gameCard.matched) {
             FlipCard(
                 cardFace = gameCard.face,
                 onClick = { onCardSelected(gameCard) },
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(.5f)
-                    .aspectRatio(1f),
+                modifier = Modifier.fillMaxSize(),
                 front = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        val context = LocalContext.current
-                        val drawableId = remember(gameCard.image) {
-                            context.resources.getIdentifier(
-                                gameCard.image,
-                                "drawable",
-                                context.packageName
-                            )
-                        }
-                        Image(
-                            painter = painterResource(id = drawableId),
-                            contentDescription = gameCard.name
-                        )
-                    }
+                    FrontCard(gameCard)
                 },
                 back = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Blue),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = "?",
-                            color = MemoryGameTheme.extraColors.white,
-                            style = MaterialTheme.typography.h1,
-                        )
-                    }
+                    BackCard()
                 },
             )
         }
+    }
+}
+
+@Composable
+private fun FrontCard(gameCard: GameCard, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        val context = LocalContext.current
+        val drawableId = remember(gameCard.image) {
+            context.resources.getIdentifier(
+                gameCard.image,
+                "drawable",
+                context.packageName
+            )
+        }
+        Image(
+            painter = painterResource(id = drawableId),
+            contentDescription = gameCard.name
+        )
+    }
+}
+
+@Composable
+private fun BackCard(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Blue),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = "?",
+            color = MemoryGameTheme.extraColors.white,
+            style = MaterialTheme.typography.h1,
+        )
     }
 }

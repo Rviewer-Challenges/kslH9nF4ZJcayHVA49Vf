@@ -6,6 +6,7 @@ import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.domain.entity.Orientation
 import com.rumosoft.feature_memorygame.domain.usecase.GetBoardUseCase
+import com.rumosoft.feature_memorygame.presentation.component.CardFace
 import com.rumosoft.feature_memorygame.presentation.navigation.destination.MatchingCardsDestination
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
@@ -14,6 +15,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,9 +28,9 @@ internal class MatchingCardsViewModelTest {
     fun `getBoardInfoUseCase is invoked when retrieveBoardInfo gets invoked on Easy Portrait`() =
         test {
             `given selectel level`(easy)
-            `given getBoardInfoUseCase returns BoardInfo`(easy, portrait)
+            `given getBoardInfoUseCase returns Board`(easy, portrait)
 
-            `when retrieveBoardInfo is invoked`(portrait)
+            `when retrieveBoard is invoked`(portrait)
 
             `then getBoardInfoUseCase is invoked`(easy, portrait)
         }
@@ -37,9 +39,9 @@ internal class MatchingCardsViewModelTest {
     fun `getBoardInfoUseCase is invoked when retrieveBoardInfo gets invoked on Difficult Landscape`() =
         test {
             `given selectel level`(difficult)
-            `given getBoardInfoUseCase returns BoardInfo`(difficult, landscape)
+            `given getBoardInfoUseCase returns Board`(difficult, landscape)
 
-            `when retrieveBoardInfo is invoked`(landscape)
+            `when retrieveBoard is invoked`(landscape)
 
             `then getBoardInfoUseCase is invoked`(difficult, landscape)
         }
@@ -54,14 +56,26 @@ internal class MatchingCardsViewModelTest {
     @Test
     fun `uiState is Ready after retrieveBoarInfo is invoked`() = test {
         `given selectel level`(easy)
-        `given getBoardInfoUseCase returns BoardInfo`(easy, landscape)
+        `given getBoardInfoUseCase returns Board`(easy, landscape)
 
-        `when retrieveBoardInfo is invoked`(landscape)
+        `when retrieveBoard is invoked`(landscape)
 
         `then uiState is Ready`()
     }
 
-    private fun TestScope.`given getBoardInfoUseCase returns BoardInfo`(
+    @Test
+    fun `onCardSelected with the first card should flip it`() = test {
+        `given selectel level`(easy)
+        `given getBoardInfoUseCase returns Board`(easy, portrait)
+        `given retrieveBoard is invoked`(portrait)
+        `given first card is reversed`()
+
+        `when calling onCardSelected on first card`()
+
+        `then the first card is revealed`()
+    }
+
+    private fun TestScope.`given getBoardInfoUseCase returns Board`(
         level: Level,
         orientation: Orientation
     ) {
@@ -78,8 +92,20 @@ internal class MatchingCardsViewModelTest {
         initViewModel(level)
     }
 
-    private fun TestScope.`when retrieveBoardInfo is invoked`(orientation: Orientation) {
+    private fun TestScope.`given retrieveBoard is invoked`(orientation: Orientation) =
+        `when retrieveBoard is invoked`(orientation)
+
+    private fun TestScope.`given first card is reversed`() {
+        assertEquals(CardFace.Back, viewModel.getFirstCard().face)
+    }
+
+    private fun TestScope.`when retrieveBoard is invoked`(orientation: Orientation) {
         viewModel.retrieveBoard(orientation)
+    }
+
+    private fun TestScope.`when calling onCardSelected on first card`() {
+        val firstCard = viewModel.getFirstCard()
+        viewModel.onCardSelected(firstCard)
     }
 
     private fun TestScope.`when selectel level`(level: Level) {
@@ -100,6 +126,13 @@ internal class MatchingCardsViewModelTest {
     private fun TestScope.`then uiState is Ready`() {
         assertTrue(viewModel.uiState.value is Ready)
     }
+
+    private fun TestScope.`then the first card is revealed`() {
+        assertEquals(CardFace.Front, viewModel.getFirstCard().face)
+    }
+
+    private fun MatchingCardsViewModel.getFirstCard(): GameCard =
+        (uiState.value as Ready).board.cards.first()
 
     private fun test(block: TestScope.() -> Unit) {
         TestScope().block()
