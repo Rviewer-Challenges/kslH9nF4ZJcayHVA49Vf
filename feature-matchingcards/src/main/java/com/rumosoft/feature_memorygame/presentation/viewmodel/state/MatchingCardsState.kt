@@ -12,3 +12,5 @@ data class Ready(
     val time: Long,
     val remainingPairs: Int,
 ): MatchingCardsState()
+object Win: MatchingCardsState()
+object Lose: MatchingCardsState()

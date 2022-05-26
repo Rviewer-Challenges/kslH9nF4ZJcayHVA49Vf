@@ -5,4 +5,7 @@
     <string name="level_difficult">Difficult</string>
     <string name="loading">Loading</string>
     <string name="cards">Cards</string>
+    <string name="win_message">You Win!</string>
+    <string name="lose_message">You Lose</string>
+    <string name="restart">Restart</string>
 </resources>

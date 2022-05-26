@@ -14,8 +14,10 @@ import com.rumosoft.feature_memorygame.domain.entity.resetCards
 import com.rumosoft.feature_memorygame.domain.usecase.GetBoardUseCase
 import com.rumosoft.feature_memorygame.presentation.navigation.destination.MatchingCardsDestination
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
+import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Lose
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.MatchingCardsState
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
+import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Win
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,8 +43,6 @@ class MatchingCardsViewModel @Inject constructor(
         Level.getByValue(savedStateHandle[MatchingCardsDestination.levelArg])
     )
     private var startingTime: Instant? = null
-    private var finished = false
-
     private var flippedCards: Pair<GameCard?, GameCard?> = null to null
 
     fun retrieveBoard(orientation: Orientation) {
@@ -63,7 +63,7 @@ class MatchingCardsViewModel @Inject constructor(
     }
 
     private suspend fun startCounter() {
-        while (!finished) {
+        while (true) {
             delay(ONE_SEC_IN_MILLIS)
             val remainingTime = ONE_MINUTE - ChronoUnit.SECONDS.between(startingTime, Instant.now())
             (_uiState.value as? Ready)?.let { state ->
@@ -72,7 +72,7 @@ class MatchingCardsViewModel @Inject constructor(
                 }
             }
             if (remainingTime <= 0) {
-                finished = true
+                _uiState.update { Lose }
             }
         }
     }
@@ -88,13 +88,21 @@ class MatchingCardsViewModel @Inject constructor(
                     )
                 } else {
                     val matched = checkMatches(card)
-                    state.copy(
-                        board = state.board.flipCard(card).let {
-                            if (matched) it.matched(card.characterId) else it
-                        },
-                        remainingPairs = if (matched) state.remainingPairs - 1
-                        else state.remainingPairs
-                    )
+                    val remainingPairs = if (matched) {
+                        state.remainingPairs - 1
+                    } else {
+                        state.remainingPairs
+                    }
+                    if (remainingPairs == 0) {
+                        Win
+                    } else {
+                        state.copy(
+                            board = state.board.flipCard(card).let {
+                                if (matched) it.matched(card.characterId) else it
+                            },
+                            remainingPairs = remainingPairs
+                        )
+                    }
                 }
             } else {
                 state
@@ -102,9 +110,15 @@ class MatchingCardsViewModel @Inject constructor(
         }
     }
 
+    fun reset() {
+        _uiState.update {
+            Loading
+        }
+    }
+
     private fun checkMatches(card: GameCard): Boolean {
         var matched = false
-        val (first, second) = flippedCards
+        val (first, _) = flippedCards
         flippedCards = if (first == null) {
             card to null
         } else {
