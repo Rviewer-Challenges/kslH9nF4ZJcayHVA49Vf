@@ -1,4 +1,4 @@
-package com.rumosoft.feature_memorygame.presentation.component
+package com.rumosoft.library_components.presentation.component
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.rumosoft.feature_memorygame.R
+import com.rumosoft.library_components.R
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
 
 @Composable

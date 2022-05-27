@@ -15,10 +15,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rumosoft.feature_memorygame.R
-import com.rumosoft.feature_memorygame.presentation.component.TopBar
 import com.rumosoft.feature_memorygame.presentation.screen.state.BuildUI
 import com.rumosoft.feature_memorygame.presentation.utils.configOrientation
 import com.rumosoft.feature_memorygame.presentation.viewmodel.MatchingCardsViewModel
+import com.rumosoft.library_components.presentation.component.TopBar
 
 @Composable
 fun MatchingCardsRoute(
@@ -41,7 +41,7 @@ fun MatchingCardsRoute(
         topBar = {
             TopBar(
                 apBarText = stringResource(R.string.match_cards_game),
-                leftIcon = painterResource(id = R.drawable.ic_arrow_back_24),
+                leftIcon = painterResource(id = com.rumosoft.library_components.R.drawable.ic_arrow_back_24),
                 leftIconPressed = onBackPressed,
             )
         }
