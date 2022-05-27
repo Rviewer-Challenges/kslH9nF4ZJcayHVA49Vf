@@ -31,6 +31,9 @@ fun NavGraphBuilder.matchingCardsGraph(navController: NavHostController) {
         )
     ) {
         MatchingCardsRoute(
+            onBackPressed = {
+                navController.popBackStack()
+            },
             onWin = {
                 navController.navigate(WinDestination.route) {
                     navController.currentDestination?.route?.let {

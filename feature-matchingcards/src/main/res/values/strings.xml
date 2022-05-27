@@ -8,4 +8,6 @@
     <string name="win_message">You Win!</string>
     <string name="lose_message">You Lose</string>
     <string name="restart">Restart</string>
+    <string name="match_cards_game">Match Cards Game</string>
+    <string name="screen_title">Screen Title</string>
 </resources>
