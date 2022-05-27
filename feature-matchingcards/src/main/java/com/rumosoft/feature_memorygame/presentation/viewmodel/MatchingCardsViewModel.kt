@@ -34,7 +34,7 @@ private const val ONE_MINUTE = 60
 class MatchingCardsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getBoardUseCase: GetBoardUseCase,
-    private val getCountDownUseCase: GetCountDownUseCase,
+    getCountDownUseCase: GetCountDownUseCase,
 ) : ViewModel() {
     val uiState: StateFlow<MatchingCardsState> get() = _uiState
     private val _uiState = MutableStateFlow<MatchingCardsState>(Loading)
@@ -88,7 +88,8 @@ class MatchingCardsViewModel @Inject constructor(
                 if (first != null && second != null) {
                     flippedCards = card to null
                     state.copy(
-                        board = state.board.resetCards(first, second).flipCard(card)
+                        board = state.board.resetCards(first, second).flipCard(card),
+                        moves = state.moves + 1
                     )
                 } else {
                     val matched = checkMatches(card)
@@ -104,7 +105,8 @@ class MatchingCardsViewModel @Inject constructor(
                             board = state.board.flipCard(card).let {
                                 if (matched) it.matched(card.characterId) else it
                             },
-                            remainingPairs = remainingPairs
+                            remainingPairs = remainingPairs,
+                            moves = state.moves + 1
                         )
                     }
                 }

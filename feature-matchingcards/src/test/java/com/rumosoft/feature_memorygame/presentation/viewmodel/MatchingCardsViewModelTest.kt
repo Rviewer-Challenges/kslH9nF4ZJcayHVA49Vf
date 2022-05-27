@@ -30,7 +30,7 @@ internal class MatchingCardsViewModelTest {
     fun `getBoardInfoUseCase is invoked when retrieveBoardInfo gets invoked on Easy Portrait`() =
         test {
             `given selected level`(easy)
-            `given getBoardInfoUseCase returns Board`(easy, portrait)
+            `given getBoardUseCase returns Board`(easy, portrait)
 
             `when retrieveBoard is invoked`(portrait)
 
@@ -41,7 +41,7 @@ internal class MatchingCardsViewModelTest {
     fun `getBoardInfoUseCase is invoked when retrieveBoardInfo gets invoked on Difficult Landscape`() =
         test {
             `given selected level`(difficult)
-            `given getBoardInfoUseCase returns Board`(difficult, landscape)
+            `given getBoardUseCase returns Board`(difficult, landscape)
 
             `when retrieveBoard is invoked`(landscape)
 
@@ -58,7 +58,7 @@ internal class MatchingCardsViewModelTest {
     @Test
     fun `uiState is Ready after retrieveBoarInfo is invoked`() = test {
         `given selected level`(easy)
-        `given getBoardInfoUseCase returns Board`(easy, landscape)
+        `given getBoardUseCase returns Board`(easy, landscape)
 
         `when retrieveBoard is invoked`(landscape)
 
@@ -68,7 +68,7 @@ internal class MatchingCardsViewModelTest {
     @Test
     fun `onCardSelected with the first card should flip it`() = test {
         `given selected level`(easy)
-        `given getBoardInfoUseCase returns Board`(easy, portrait)
+        `given getBoardUseCase returns Board`(easy, portrait)
         `given retrieveBoard is invoked`(portrait)
         `given first card is reversed`()
 
@@ -77,7 +77,7 @@ internal class MatchingCardsViewModelTest {
         `then the first card is revealed`()
     }
 
-    private fun TestScope.`given getBoardInfoUseCase returns Board`(
+    private fun TestScope.`given getBoardUseCase returns Board`(
         level: Level,
         orientation: Orientation
     ) {
