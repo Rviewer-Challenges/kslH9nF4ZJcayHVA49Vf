@@ -27,7 +27,7 @@ internal class MatchingCardsViewModelTest {
     @Test
     fun `getBoardInfoUseCase is invoked when retrieveBoardInfo gets invoked on Easy Portrait`() =
         test {
-            `given selectel level`(easy)
+            `given selected level`(easy)
             `given getBoardInfoUseCase returns Board`(easy, portrait)
 
             `when retrieveBoard is invoked`(portrait)
@@ -38,7 +38,7 @@ internal class MatchingCardsViewModelTest {
     @Test
     fun `getBoardInfoUseCase is invoked when retrieveBoardInfo gets invoked on Difficult Landscape`() =
         test {
-            `given selectel level`(difficult)
+            `given selected level`(difficult)
             `given getBoardInfoUseCase returns Board`(difficult, landscape)
 
             `when retrieveBoard is invoked`(landscape)
@@ -48,14 +48,14 @@ internal class MatchingCardsViewModelTest {
 
     @Test
     fun `uiState is Loading when the ViewModel is created`() = test {
-        `when selectel level`(easy)
+        `when selected level`(easy)
 
         `then uiState is Loading`()
     }
 
     @Test
     fun `uiState is Ready after retrieveBoarInfo is invoked`() = test {
-        `given selectel level`(easy)
+        `given selected level`(easy)
         `given getBoardInfoUseCase returns Board`(easy, landscape)
 
         `when retrieveBoard is invoked`(landscape)
@@ -65,7 +65,7 @@ internal class MatchingCardsViewModelTest {
 
     @Test
     fun `onCardSelected with the first card should flip it`() = test {
-        `given selectel level`(easy)
+        `given selected level`(easy)
         `given getBoardInfoUseCase returns Board`(easy, portrait)
         `given retrieveBoard is invoked`(portrait)
         `given first card is reversed`()
@@ -88,7 +88,7 @@ internal class MatchingCardsViewModelTest {
                 )
     }
 
-    private fun TestScope.`given selectel level`(level: Level) {
+    private fun TestScope.`given selected level`(level: Level) {
         initViewModel(level)
     }
 
@@ -108,8 +108,8 @@ internal class MatchingCardsViewModelTest {
         viewModel.onCardSelected(firstCard)
     }
 
-    private fun TestScope.`when selectel level`(level: Level) {
-        `given selectel level`(level)
+    private fun TestScope.`when selected level`(level: Level) {
+        `given selected level`(level)
     }
 
     private fun TestScope.`then getBoardInfoUseCase is invoked`(

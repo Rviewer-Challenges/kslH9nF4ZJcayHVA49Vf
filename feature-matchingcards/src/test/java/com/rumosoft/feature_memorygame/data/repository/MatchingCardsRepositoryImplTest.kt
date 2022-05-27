@@ -19,7 +19,7 @@ internal class MatchingCardsRepositoryImplTest {
     }
 
     private fun TestScope.`given fetchCards on data source returns data`() {
-        every { simpsonsDataSource.fetchCards(1) } returns
+        every { simpsonsDataSource.fetchCards(numCards / 2) } returns
                 listOf(
                     CardDto(
                         characterId = 1,
