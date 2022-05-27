@@ -1,5 +1,6 @@
 package com.rumosoft.library_components.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
@@ -23,12 +25,13 @@ fun BigRoundedButton(
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     onClick: () -> Unit = {}
 ) {
+    val configuration = LocalConfiguration.current
     Button(
         onClick = onClick,
         modifier = modifier
             .defaultMinSize(
                 minWidth = 160.dp,
-                minHeight = 96.dp
+                minHeight = calcMinHeight(configuration)
             )
             .clip(RoundedCornerShape(50)),
         colors = colors,
@@ -40,6 +43,11 @@ fun BigRoundedButton(
         )
     }
 }
+
+@Composable
+private fun calcMinHeight(configuration: Configuration) =
+    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) 96.dp
+    else 72.dp
 
 @Preview
 @Composable
