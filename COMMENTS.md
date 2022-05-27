@@ -5,6 +5,15 @@ I've chosen a cartoons theme mostly because it's a theme that I like but also be
 are perfect in vector format so that they can be stored as vector drawables taking few space
 and the size of the app remains small and can be used offline.
 
+By the way, I've followed all the instructions but it says the cards should remain uncovered, 
+I've preferred to make disappear the matches so that the user has a better vision of what's left,
+or at least that's my idea. I hope this doesn't matter.
+It also doesn't specify what to do after the two cards are flipped, I was between flipping them 
+down after some time has passed but then decided it was better to flip them down when the next 
+movement is done, I think both ways should be ok as both seem to follow the given instructions.
+In a normal environment with more interaction I would checked with the one in charge (usually a PO)
+what should be done before starting but as it's just a game that does not seem critical.
+
 ## Modules
 I tried to create different modules so that the app is about memory game and matchingcards 
 is just a feature of it but it could have multiple different features.
