@@ -1,5 +1,6 @@
 package com.rumosoft.feature_memorygame.presentation.screen
 
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,8 @@ internal fun LoseScreen(
 @Composable
 fun LoseScreenPreview() {
     MemoryGameTheme {
-        LoseScreen()
+        Surface {
+            LoseScreen()
+        }
     }
 }

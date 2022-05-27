@@ -11,7 +11,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.rumosoft.feature_memorygame.presentation.screen.state.BuildUI
 import com.rumosoft.feature_memorygame.presentation.utils.configOrientation
 import com.rumosoft.feature_memorygame.presentation.viewmodel.MatchingCardsViewModel
-import timber.log.Timber
 
 @Composable
 fun MatchingCardsRoute(

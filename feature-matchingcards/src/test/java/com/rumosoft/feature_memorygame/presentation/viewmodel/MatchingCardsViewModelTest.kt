@@ -6,6 +6,7 @@ import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.domain.entity.Orientation
 import com.rumosoft.feature_memorygame.domain.usecase.GetBoardUseCase
+import com.rumosoft.feature_memorygame.domain.usecase.GetCountDownUseCase
 import com.rumosoft.feature_memorygame.presentation.component.CardFace
 import com.rumosoft.feature_memorygame.presentation.navigation.destination.MatchingCardsDestination
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
@@ -15,6 +16,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -140,12 +142,14 @@ internal class MatchingCardsViewModelTest {
 
     private class TestScope(
         val easy: Level = Level.Easy,
-        val medium: Level = Level.Medium,
         val difficult: Level = Level.Difficult,
         val portrait: Orientation = Orientation.Portrait,
         val landscape: Orientation = Orientation.Landscape,
         val savedStateHandle: SavedStateHandle = SavedStateHandle(),
         val getBoardUseCase: GetBoardUseCase = mockk(),
+        val getCountDownUseCase: GetCountDownUseCase = mockk<GetCountDownUseCase>().also {
+            every { it.invoke(any()) } returns flowOf(1L)
+        },
     ) {
         lateinit var viewModel: MatchingCardsViewModel
 
@@ -154,6 +158,7 @@ internal class MatchingCardsViewModelTest {
             viewModel = MatchingCardsViewModel(
                 savedStateHandle,
                 getBoardUseCase,
+                getCountDownUseCase
             )
         }
     }

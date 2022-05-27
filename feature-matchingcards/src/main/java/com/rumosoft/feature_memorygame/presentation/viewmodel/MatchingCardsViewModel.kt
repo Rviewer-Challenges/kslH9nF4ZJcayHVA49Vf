@@ -12,6 +12,7 @@ import com.rumosoft.feature_memorygame.domain.entity.matched
 import com.rumosoft.feature_memorygame.domain.entity.numPairs
 import com.rumosoft.feature_memorygame.domain.entity.resetCards
 import com.rumosoft.feature_memorygame.domain.usecase.GetBoardUseCase
+import com.rumosoft.feature_memorygame.domain.usecase.GetCountDownUseCase
 import com.rumosoft.feature_memorygame.presentation.navigation.destination.MatchingCardsDestination
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Lose
@@ -19,22 +20,21 @@ import com.rumosoft.feature_memorygame.presentation.viewmodel.state.MatchingCard
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Win
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val ONE_MINUTE = 60
-private const val ONE_SEC_IN_MILLIS = 1_000L
 
 @HiltViewModel
 class MatchingCardsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getBoardUseCase: GetBoardUseCase,
+    private val getCountDownUseCase: GetCountDownUseCase,
 ) : ViewModel() {
     val uiState: StateFlow<MatchingCardsState> get() = _uiState
     private val _uiState = MutableStateFlow<MatchingCardsState>(Loading)
@@ -42,37 +42,41 @@ class MatchingCardsViewModel @Inject constructor(
     private val level: Level = checkNotNull(
         Level.getByValue(savedStateHandle[MatchingCardsDestination.levelArg])
     )
-    private var startingTime: Instant? = null
     private var flippedCards: Pair<GameCard?, GameCard?> = null to null
+
+    private val countDown = getCountDownUseCase(ONE_MINUTE).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = 60L
+    )
 
     fun retrieveBoard(orientation: Orientation) {
         val board = getBoardUseCase(level, orientation)
-        startingTime = Instant.now()
-        val remainingTime = ONE_MINUTE - ChronoUnit.SECONDS.between(Instant.now(), startingTime)
         _uiState.update {
             Ready(
                 level = level,
                 board = board,
-                time = remainingTime,
+                time = ONE_MINUTE.toLong(),
                 remainingPairs = board.numPairs,
             )
         }
-        viewModelScope.launch {
-            startCounter()
-        }
+        updateRemainingTime()
     }
 
-    private suspend fun startCounter() {
-        while (true) {
-            delay(ONE_SEC_IN_MILLIS)
-            val remainingTime = ONE_MINUTE - ChronoUnit.SECONDS.between(startingTime, Instant.now())
-            (_uiState.value as? Ready)?.let { state ->
-                _uiState.update {
-                    state.copy(time = remainingTime)
+    private fun updateRemainingTime() {
+        viewModelScope.launch {
+            countDown.collect { remainingTime ->
+                if (remainingTime > 0) {
+                    _uiState.update { state ->
+                        if (state is Ready) {
+                            state.copy(time = remainingTime)
+                        } else {
+                            state
+                        }
+                    }
+                } else {
+                    _uiState.update { Lose }
                 }
-            }
-            if (remainingTime <= 0) {
-                _uiState.update { Lose }
             }
         }
     }
@@ -130,3 +134,4 @@ class MatchingCardsViewModel @Inject constructor(
         return matched
     }
 }
+

@@ -8,6 +8,7 @@ import com.rumosoft.feature_memorygame.R
 import com.rumosoft.feature_memorygame.domain.entity.Board
 import com.rumosoft.feature_memorygame.domain.entity.GameCard
 import com.rumosoft.feature_memorygame.domain.entity.Level
+import com.rumosoft.feature_memorygame.presentation.screen.state.BuildUI
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
 import org.junit.Rule
@@ -23,8 +24,8 @@ internal class MatchingCardsScreenKtTest {
 
         composeTestRule.setContent {
             loadingDescription = stringResource(id = R.string.loading)
-
-            MatchingCardsScreen(uiState = Loading)
+            val uiState = Loading
+            uiState.BuildUI()
         }
 
         composeTestRule.onNodeWithContentDescription(loadingDescription).assertIsDisplayed()
@@ -37,22 +38,21 @@ internal class MatchingCardsScreenKtTest {
         composeTestRule.setContent {
             cardsDescription = stringResource(id = R.string.cards)
 
-            MatchingCardsScreen(
-                uiState = Ready(
-                    level = Level.Easy,
-                    board = Board(
-                        cards = listOf(
-                            getSampleCard(1),
-                            getSampleCard(2),
-                            getSampleCard(3),
-                            getSampleCard(4)
-                        ),
-                        columns = 2,
+            val uiState = Ready(
+                level = Level.Easy,
+                board = Board(
+                    cards = listOf(
+                        getSampleCard(1),
+                        getSampleCard(2),
+                        getSampleCard(3),
+                        getSampleCard(4)
                     ),
-                    time = 60,
-                    remainingPairs = 2,
-                )
+                    columns = 2,
+                ),
+                time = 60,
+                remainingPairs = 2,
             )
+            uiState.BuildUI()
         }
 
         composeTestRule.onNodeWithContentDescription(cardsDescription).assertIsDisplayed()

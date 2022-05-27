@@ -8,14 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import com.rumosoft.feature_memorygame.R
+import com.rumosoft.feature_memorygame.domain.entity.Board
 import com.rumosoft.feature_memorygame.domain.entity.GameCard
+import com.rumosoft.feature_memorygame.domain.entity.Level
 import com.rumosoft.feature_memorygame.presentation.component.Counter
 import com.rumosoft.feature_memorygame.presentation.component.GameBoard
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Loading
@@ -24,7 +28,6 @@ import com.rumosoft.feature_memorygame.presentation.viewmodel.state.MatchingCard
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Win
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
-import timber.log.Timber
 
 @Composable
 fun MatchingCardsState.BuildUI(
@@ -84,5 +87,20 @@ fun Counters(
         Counter("Moves: ${uiState.moves}")
         Counter("Remaining Pairs: ${uiState.remainingPairs}")
         Counter("Time: ${uiState.time}")
+    }
+}
+
+@Preview
+@Composable
+fun CountersPreview() {
+    val readyState = Ready(
+        level = Level.Easy,
+        board = Board(emptyList(), 1),
+        time = 60, remainingPairs = 1, moves = 2
+    )
+    MemoryGameTheme {
+        Surface {
+            Counters(uiState = readyState)
+        }
     }
 }

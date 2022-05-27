@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,6 +51,8 @@ fun EndResult(
 @Composable
 fun EndResultPreview() {
     MemoryGameTheme {
-        EndResult("You Win!", R.drawable.win, "Restart")
+        Surface {
+            EndResult("You Win!", R.drawable.win, "Restart")
+        }
     }
 }
