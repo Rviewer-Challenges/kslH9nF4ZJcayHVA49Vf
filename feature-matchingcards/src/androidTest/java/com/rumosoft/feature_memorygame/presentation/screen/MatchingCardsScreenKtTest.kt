@@ -19,7 +19,7 @@ internal class MatchingCardsScreenKtTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun matchingCardsScreenScreen_withLoadingState_loadingIsVisible() {
+    fun matchingCardsScreenScreen_withLoadingState_loading_IsVisible() {
         lateinit var loadingDescription: String
 
         composeTestRule.setContent {
@@ -32,7 +32,7 @@ internal class MatchingCardsScreenKtTest {
     }
 
     @Test
-    fun matchingCardsScreenScreen_withReadyState_cardsIsVisible() {
+    fun matchingCardsScreenScreen_withReadyState_cards_IsVisible() {
         lateinit var cardsDescription: String
 
         composeTestRule.setContent {

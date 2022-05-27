@@ -13,7 +13,7 @@ internal class LevelSelectionScreenKtTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun levelSelectionScreen_showsScreenElements() {
+    fun levelSelectionScreen_screenElements_areVisible() {
         lateinit var selectLevelTitle: String
         lateinit var levelEasyButtonTitle: String
         lateinit var levelMediumButtonTitle: String
