@@ -10,4 +10,7 @@
     <string name="restart">Restart</string>
     <string name="match_cards_game">Match Cards Game</string>
     <string name="screen_title">Screen Title</string>
+    <string name="movements">Movements %1$d</string>
+    <string name="remaining_pairs">Remaining Pairs: %1$d</string>
+    <string name="time">Time: %1$d</string>
 </resources>

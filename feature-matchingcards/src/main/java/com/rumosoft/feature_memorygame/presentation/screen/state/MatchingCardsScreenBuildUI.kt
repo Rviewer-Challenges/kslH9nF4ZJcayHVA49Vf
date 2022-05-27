@@ -27,6 +27,7 @@ import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Lose
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.MatchingCardsState
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Ready
 import com.rumosoft.feature_memorygame.presentation.viewmodel.state.Win
+import com.rumosoft.feature_memorygame.presentation.viewmodel.state.movements
 import com.rumosoft.library_components.presentation.theme.MemoryGameTheme
 
 @Composable
@@ -84,23 +85,8 @@ fun Counters(
             .padding(MemoryGameTheme.paddings.medium),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Counter("Moves: ${uiState.moves}")
-        Counter("Remaining Pairs: ${uiState.remainingPairs}")
-        Counter("Time: ${uiState.time}")
-    }
-}
-
-@Preview
-@Composable
-fun CountersPreview() {
-    val readyState = Ready(
-        level = Level.Easy,
-        board = Board(emptyList(), 1),
-        time = 60, remainingPairs = 1, moves = 2
-    )
-    MemoryGameTheme {
-        Surface {
-            Counters(uiState = readyState)
-        }
+        Counter(stringResource(id = R.string.movements, uiState.movements))
+        Counter(stringResource(id = R.string.remaining_pairs, uiState.remainingPairs))
+        Counter(stringResource(id = R.string.time, uiState.time))
     }
 }

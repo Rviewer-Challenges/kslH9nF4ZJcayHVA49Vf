@@ -8,9 +8,12 @@ object Loading: MatchingCardsState()
 data class Ready(
     val level: Level,
     val board: Board,
-    val moves: Int = 0,
+    val cardsFlipped: Int = 0,
     val time: Long,
     val remainingPairs: Int,
 ): MatchingCardsState()
 object Win: MatchingCardsState()
 object Lose: MatchingCardsState()
+
+val Ready.movements: Int
+    get() = cardsFlipped / 2

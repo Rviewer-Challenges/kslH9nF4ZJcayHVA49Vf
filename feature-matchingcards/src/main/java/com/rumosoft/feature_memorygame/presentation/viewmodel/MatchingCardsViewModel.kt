@@ -89,7 +89,7 @@ class MatchingCardsViewModel @Inject constructor(
                     flippedCards = card to null
                     state.copy(
                         board = state.board.resetCards(first, second).flipCard(card),
-                        moves = state.moves + 1
+                        cardsFlipped = state.cardsFlipped + 1
                     )
                 } else {
                     val matched = checkMatches(card)
@@ -106,7 +106,7 @@ class MatchingCardsViewModel @Inject constructor(
                                 if (matched) it.matched(card.characterId) else it
                             },
                             remainingPairs = remainingPairs,
-                            moves = state.moves + 1
+                            cardsFlipped = state.cardsFlipped + 1
                         )
                     }
                 }
