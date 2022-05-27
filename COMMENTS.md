@@ -2,7 +2,7 @@
 
 Simple app containing in a matching cards game.
 I've chosen a cartoons theme mostly because it's a theme that I like but also because these images
-are perfect in vectorial format so that they can be stored as vector drawables taking few space
+are perfect in vector format so that they can be stored as vector drawables taking few space
 and the size of the app remains small and can be used offline.
 
 ## Modules
