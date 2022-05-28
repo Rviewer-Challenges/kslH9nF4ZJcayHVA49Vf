@@ -39,3 +39,6 @@ Most of the Simpsons images (to transform to vector drawables): https://all-free
 One simple way of being able to quickly win the game while testing is to comment the .shuffled() 
 in MatchingCardsRepositoryImpl.kt so that the cards and their matches are always in the same 
 positions.
+
+## Video playing the game
+https://www.youtube.com/shorts/LD6-VDvAaro
