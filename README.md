@@ -1,69 +1,44 @@
-# Memory Game
+# Memory game
 
-Who hasn't played card games at some point? From a very young age to a beer night with friends, right?
+Simple app containing in a matching cards game.
+I've chosen a cartoons theme mostly because it's a theme that I like but also because these images
+are perfect in vector format so that they can be stored as vector drawables taking few space
+and the size of the app remains small and can be used offline.
 
-Well, for this Challenge you will have to choose your favourite theme and recreate
-the [famous game](https://en.wikipedia.org/wiki/Concentration_(card_game)).
+By the way, I've followed all the instructions but it says the cards should remain uncovered, 
+I've preferred to make disappear the matches so that the user has a better vision of what's left,
+or at least that's my idea. I hope this doesn't matter.
+It also doesn't specify what to do after the two cards are flipped, I was between flipping them 
+down after some time has passed but then decided it was better to flip them down when the next 
+movement is done, I think both ways should be ok as both seem to follow the given instructions.
+In a normal environment with more interaction I would checked with the one in charge (usually a PO)
+what should be done before starting but as it's just a game that does not seem critical.
 
-![Brais Moure Challenge card](moure_memory-game.png)
+## Modules
+I tried to create different modules so that the app is about memory game and matchingcards 
+is just a feature of it but it could have multiple different features.
 
-> This is a challenge created by [MoureDev](https://www.twitch.tv/mouredev). He will review and give feedback to some
-> proposed solutions from the community in one of his Twitch livestreams 😻 
+These modules are:
+- feature-matchingcards: Contains the code of the matching cards game (without the datasource)
+- library-simpsons-api: The data source to get info from the simpsons. It doesn't call any network 
+endpoint as for this exercise doesn't seem necessary, but it could in case it should be extended 
+and get the data from an online endpoint.
+- library-components: it's idea is to have components that can be reused in 
+different features of the app.
+- library-core-navigation: is a kotlin lib that only contains an interface used in navigation. 
+All feature modules include this.
+- library-tests: Contains utilities to test coroutines and also some testing libraries using for 
+jvm unit tests.
 
-**Surprise us! 😉**
+## Resources
 
-## How it works?
+FlipCard code is from: https://fvilarino.medium.com/creating-a-rotating-card-in-jetpack-compose-ba94c7dd76fb
+Most of the Simpsons images (to transform to vector drawables): https://all-free-download.com/free-vector/simpsons-svg.html
 
-The requirements for the game are pretty simple. First, you have to choose whatever theme you want to, like
-Pokémon, Star Wars or even Peppa Pig!
+## Trick
+One simple way of being able to quickly win the game while testing is to comment the .shuffled() 
+in MatchingCardsRepositoryImpl.kt so that the cards and their matches are always in the same 
+positions.
 
-The dynamics of the game will consist of presenting a board with a series of face-down cards and revealing all the pairs
-before the time is up. The user will tap on each card to turn it over and, if two of them match when they are uncovered,
-they will be turned face up. If not, they will be hidden again.
-
-**The game is won if all pairs are uncovered within the time limit.**
-
-So, the game will have an initial screen to select one of the three difficulties and 1 minute to solve each board:
-
-* Easy: 4x4 board
-* Medium: 4x6 board (or 6x4 depending on the screen)
-* Difficult: 5x6 board (or 6x5 depending on screen)
-
-The application will have a main game screen that contains the following elements:
-
-* Game board. The board where the user will play and see the cards.
-* Move counter. Every time 2 cards are turned over it will increase by 1, whether you hit or not.
-* Time counter. A 1-min countdown to reveal all pairs!
-* Remaining pairs counter.
-* A button to return to the level selection screen.
-
-## Technical requirements
-
-* Create a **clean**, **maintainable** and **well-designed** code. We expect to see a good and clear architecture that
-  allows to add or modify the solution without so much troubles.
-* **Test** your code until you are comfortable with it. We don't expect a 100% of Code Coverage but some tests that
-  helps to have a more stable and confident base code.
-
-To understand how you take decisions during the implementation, **please write a COMMENTS.md** file explaining some of
-the most important parts of the application. You would also be able to defend your code through
-[Rviewer](https://rviewer.io), once you submit your solution.
-
----
-
-## How to submit your solution
-
-* Push your code to the `devel` branch - we encourage you to commit regularly to show your thinking process was.
-* **Create a new Pull Request** to `main` branch & **merge it**.
-
-Once merged you **won't be able to change or add** anything to your solution, so double-check that everything is as you
-expected!
-
-Remember that **there is no countdown**, so take your time and implement a solution that you are proud!
-
---- 
-
-<p align="center">
-  If you have any feedback or problem, <a href="mailto:help@rviewer.io">let us know!</a> 🤘
-  <br><br>
-  Made with ❤️ by <a href="https://rviewer.io">Rviewer</a>
-</p>
+## Video playing the game
+https://www.youtube.com/shorts/LD6-VDvAaro
